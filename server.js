@@ -1,20 +1,16 @@
+// Dependencies
 var express = require("express");
-var exphbs = require("express-handlebars");
+var inquirer = require("inquirer");
 var mysql = require("mysql");
 
+// Create express app instance.
 var app = express();
 
-var PORT = process.env.PORT || 8081;
+// Set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var PORT = process.env.PORT || 8080;
 
-// Sets up the Express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.use(express.static("public"));
-
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
+// MySQL DB Connection Information (remember to change this with our specific credentials)
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -23,6 +19,7 @@ var connection = mysql.createConnection({
   database: "employee_info_db"
 });
 
+// Initiate MySQL Connection.
 connection.connect(function(err) {
   if (err) {
     console.error("error connecting: " + err.stack);
@@ -31,63 +28,69 @@ connection.connect(function(err) {
   console.log("connected as id " + connection.threadId);
 });
 
-// Serve index.handlebars to the root route, populated with all quote data.
-app.get("/", function(req, res) {
-  connection.query("SELECT * FROM employee;", function(err, data) {
-    if (err) {
-      throw err;
-    }
-    res.render("index", { employee: data });
-  })
-});
+// Routes
+app.get("/cast", function(req, res) {
 
-app.post("/api/employee", function(req, res) {
-  // Test it.
-  // console.log('You sent, ' + req.body.wish);
+  connection.query("SELECT * FROM name", function(err, result) {
+    if (err) throw err;
+  
+    var html = "<h1> Seinfeld </h1>";
 
-  // Test it.
-  // res.send('You sent, ' + req.body.wish)
-  console.log(req.body);
-  connection.query("INSERT INTO employee SET ?", {author:req.body.author, quote:req.body.quote}, function(err, result) {
-    if (err) {
-      throw err;
+
+    html += "<ul>";
+
+    for (var i = 0; i < result.length; i++) {
+      html += "<li><p> ID: " + result[i].id + "</p>";
+      html += "<p>Name: " + result[i].name + " </p></li>";
+      html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
+      html += "<p>Atitude: " + result[i].attitude + " </p></li>";
     }
 
-    res.redirect("/");
+
+
+
+    app.get("/coolness-points", function(req, res) {
+
+        connection.query("SELECT * FROM name", function(err, result) {
+          if (err) throw err;
+        
+          var html = "<h1> Seinfeld </h1>";
+      
+      
+          html += "<ul>";
+      
+          for (var i = 0; i < result.length; i++) {
+            html += "<li><p> ID: " + result[i].id + "</p>";
+            html += "<p>Name: " + result[i].name + " </p></li>";
+            html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
+            html += "<p>Attitude: " + result[i].attitude + " </p></li>";
+          }
+
+
+app.get("attitude-chart/:att ", function(req, res) {
+
+            connection.query("SELECT * FROM attitude", function(err, result) {
+              if (err) throw err;
+            
+              var html = "<h1> Seinfeld </h1>";
+          
+          
+              html += "<ul>";
+          
+              for (var i = 0; i < result.length; i++) {
+                html += "<li><p> ID: " + result[i].id + "</p>";
+                html += "<p>Name: " + result[i].name + " </p></li>";
+                html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
+                html += "<p>Attitude: " + result[i].attitude + " </p></li>";
+              }
+
+    // We close our unordered list.
+    html += "</ul>";
+
+    // Finally we send the user the HTML file we dynamically created.
+    res.send(html);
   });
 });
-
-app.delete("/api/department/:id", function(req, res) {
-  connection.query("DELETE FROM department WHERE id = ?", [req.params.id], function(err, result) {
-    if (err) {
-      // If an error occurred, send a generic server failure
-      return res.status(500).end();
-    }
-    else if (result.affectedRows === 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    }
-    res.status(200).end();
-
-  });
-});
-
-
-app.put("/api/employee/:id", function(req, res) {
-  connection.query("UPDATE employee SET employee = ? WHERE id = ?", [req.body.employee, req.params.id], function(err, result) {
-    if (err) {
-      // If an error occurred, send a generic server failure
-      return res.status(500).end();
-    }
-    else if (result.changedRows === 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    }
-    res.status(200).end();
-
-  });
-});
-
 
 // Start our server so that it can begin listening to client requests.
 app.listen(PORT, function() {

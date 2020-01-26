@@ -1,0 +1,20 @@
+{
+  "name": "employeetracker",
+  "version": "1.0.0",
+  "description": "This program allows the user to see which department each employee works in as well as their employee id, salary, full name, as well as if they are a manager of their department.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JShields30/EmployeeTracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JShields30/EmployeeTracker/issues"
+  },
+  "homepage": "https://github.com/JShields30/EmployeeTracker#readme"
+}

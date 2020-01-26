@@ -47,8 +47,6 @@ app.get("/cast", function(req, res) {
     }
 
 
-
-
     app.get("/coolness-points", function(req, res) {
 
         connection.query("SELECT * FROM name", function(err, result) {

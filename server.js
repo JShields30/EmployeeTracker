@@ -29,66 +29,11 @@ connection.connect(function(err) {
 });
 
 // Routes
-app.get("/cast", function(req, res) {
+// app.get("/", function(req, res) {
+//   connection.query("SELECT * FROM name", function(err, result) {
 
-  connection.query("SELECT * FROM name", function(err, result) {
-    if (err) throw err;
-  
-    var html = "<h1> Seinfeld </h1>";
+// };
 
-
-    html += "<ul>";
-
-    for (var i = 0; i < result.length; i++) {
-      html += "<li><p> ID: " + result[i].id + "</p>";
-      html += "<p>Name: " + result[i].name + " </p></li>";
-      html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
-      html += "<p>Atitude: " + result[i].attitude + " </p></li>";
-    }
-
-
-    app.get("/coolness-points", function(req, res) {
-
-        connection.query("SELECT * FROM name", function(err, result) {
-          if (err) throw err;
-        
-          var html = "<h1> Seinfeld </h1>";
-      
-      
-          html += "<ul>";
-      
-          for (var i = 0; i < result.length; i++) {
-            html += "<li><p> ID: " + result[i].id + "</p>";
-            html += "<p>Name: " + result[i].name + " </p></li>";
-            html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
-            html += "<p>Attitude: " + result[i].attitude + " </p></li>";
-          }
-
-
-app.get("attitude-chart/:att ", function(req, res) {
-
-            connection.query("SELECT * FROM attitude", function(err, result) {
-              if (err) throw err;
-            
-              var html = "<h1> Seinfeld </h1>";
-          
-          
-              html += "<ul>";
-          
-              for (var i = 0; i < result.length; i++) {
-                html += "<li><p> ID: " + result[i].id + "</p>";
-                html += "<p>Name: " + result[i].name + " </p></li>";
-                html += "<p>Coolness Points: " + result[i].coolness_points + " </p></li>";
-                html += "<p>Attitude: " + result[i].attitude + " </p></li>";
-              }
-
-    // We close our unordered list.
-    html += "</ul>";
-
-    // Finally we send the user the HTML file we dynamically created.
-    res.send(html);
-  });
-});
 
 // Start our server so that it can begin listening to client requests.
 app.listen(PORT, function() {
